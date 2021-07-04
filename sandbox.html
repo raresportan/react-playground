@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+   <script type="text/babel" data-presets="es2015,react"></script>
+   <script>
+        let origin;
+
+        window.addEventListener('message', e => {
+            origin = e.source;
+            document.getElementById('error').style.display='none';
+            document.getElementById('app').style.display='block';
+
+            const { code } = e.data;
+            if (code) {
+                // here the code is evaluated in the iframe
+                try {
+                  let result = Babel.transform(code, { presets: ["env", "react"] }).code;
+                  Function(result)(window);
+                }
+                catch(err){
+                  document.getElementById('app').style.display='none';
+                  document.getElementById('error').style.display='block';
+                  document.getElementById('error').innerHTML = err.message;
+                }
+            }
+        });
+    </script>
+    <style>
+      body {
+        font-family: 'Gill Sans','Gill Sans MT',Calibri,'Trebuchet MS',sans-serif;
+        color: #222;
+        padding: 1rem;
+      }
+
+      #error{
+        background: #fef5f6;
+        color: #de0000;
+        padding: 1rem;
+        border: 1px solid #de0000;
+        border-radius: 5px;
+        display: none;
+        white-space: pre-wrap;
+      }
+    </style>
+</head>
+<body>
+  <pre id="error">
+
+  </pre>
+  <div id="app"></div>
+</body>
+</html>
