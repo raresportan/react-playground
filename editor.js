@@ -36,8 +36,7 @@ const myTheme = EditorView.baseTheme({
 let timer;
 
 const evaluateCode = (code) => {
-  console.log('Eval');
-  // console.clear();
+  console.clear();
   try{
     const sandbox = document.getElementById('sandbox');
     sandbox.contentWindow.postMessage({ code }, '*');
